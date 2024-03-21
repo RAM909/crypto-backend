@@ -105,7 +105,7 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/add", async (req, res) => {
-    const { Id, MQ2, MQ5, MQ6, MQ7 } = req.body;
+    const { Id, MQ2, MQ5, MQ6, MQ7 } = req.query;
     
 
     // Encrypt data before insertion
@@ -115,11 +115,6 @@ app.post("/add", async (req, res) => {
     const hashedmq7 = encrypt(MQ7, process.env.SECRET_KEY);
 
     try {
-        const check = await DataModel.findOne({ Id: Id });
-
-        if (check) {
-            res.json("ID ALREADY EXISTS");
-        } else {
             const result = await DataModel.create({
                 Id: Id,
                 MQ2: hashedmq2,
@@ -129,7 +124,7 @@ app.post("/add", async (req, res) => {
             });
             console.log(result);
             res.json("ADDED");
-        }
+        
     } catch (e) {
         console.error(e);
         res.json("fail");
